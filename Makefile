@@ -18,12 +18,12 @@ EXE_SRCS := $(shell find $(EXE_DIR) -name *.c)
 EXE_OBJS := $(EXE_SRCS:%=$(BUILD_DIR)/%.o)
 EXE_DEPS := $(EXE_OBJS:.o=.d)
 
-CFLAGS ?= -Wall -Wextra  -MMD -MP
+CFLAGS ?= -Wall -Wextra -MMD -MP
 DEBUG ?= -g
 SANATIZE ?= -fno-omit-frame-pointer -fsanitize=address
 
-#If you need to link against a library uncomment the line below and add the library name
-#LDFLAGS ?= -pthread -lreadline
+# Add readline library - this line was commented out in your original makefile
+LDFLAGS ?= -lreadline
 
 #Default to building without debug flags
 all: $(TARGET_EXEC) $(TARGET_TEST)
@@ -55,7 +55,7 @@ clean:
 .PHONY: install-deps
 install-deps:
 	sudo apt-get update -y
-	sudo apt-get install -y libio-socket-ssl-perl libmime-tools-perl
+	sudo apt-get install -y libio-socket-ssl-perl libmime-tools-perl libreadline-dev
 
 
 -include $(DEPS) $(TEST_DEPS) $(EXE_DEPS)
