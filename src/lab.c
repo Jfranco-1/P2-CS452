@@ -93,7 +93,6 @@ char **cmd_parse(char const *line) {
         return NULL;
     }
     
-    // Tokenize and store arguments
     int i = 0;
     char *saveptr = NULL;
     char *token = strtok_r(linecopy, " ", &saveptr);
@@ -104,14 +103,12 @@ char **cmd_parse(char const *line) {
         i++;
     }
     
-    // Last element is NULL to match execvp requirements
     result[i] = NULL;
     
     free(linecopy);
     return result;
 }
 
-// Free command resources
 void cmd_free(char **line) {
     if (!line) return;
     
@@ -125,12 +122,12 @@ void cmd_free(char **line) {
 int change_dir(char **dir) {
     char *target_dir = NULL;
     
-    // Handle NULL input
+
     if (!dir) return -1;
     
     // If no argument is provided or only "cd" is specified
     if (!dir[1]) {
-        // First try to get HOME from environment
+
         target_dir = getenv("HOME");
         
         // If HOME is not set, use getpwuid to find home directory
@@ -194,15 +191,13 @@ bool do_builtin(struct shell *sh, char **argv) {
 void sh_init(struct shell *sh) {
     if (!sh) return;
     
-    // Set up shell data structure
+
     sh->prompt = get_prompt("MY_PROMPT");
     
-    // Check if we're in an interactive session
     sh->shell_terminal = STDIN_FILENO;
     sh->shell_is_interactive = isatty(sh->shell_terminal);
     
     if (sh->shell_is_interactive) {
-        // Loop until in the foreground
         while (tcgetpgrp(sh->shell_terminal) != (sh->shell_pgid = getpgrp())) {
             kill(-sh->shell_pgid, SIGTTIN);
         }
@@ -221,7 +216,6 @@ void sh_init(struct shell *sh) {
             exit(EXIT_FAILURE);
         }
         
-        // Take control of the terminal
         tcsetpgrp(sh->shell_terminal, sh->shell_pgid);
         
         // Save default terminal attributes
