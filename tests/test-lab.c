@@ -239,7 +239,7 @@ void test_ch_dir_root(void)
 // Test change_dir to a specific directory
 void test_ch_dir_specific(void)
 {
-     // First change to root to ensure we're starting from a consistent location
+
      chdir("/");
      
      char *line = (char*) calloc(10, sizeof(char));
@@ -259,20 +259,15 @@ void test_ch_dir_specific(void)
 // Test do_builtin for exit command
 void test_do_builtin_exit(void)
 {
-     // This is tricky to test without exiting the test process
-     // We'll just check that it recognizes "exit" as a builtin
      struct shell sh;
      sh.prompt = strdup("test>");
      
      char **cmd = cmd_parse("exit");
      bool result = do_builtin(&sh, cmd);
      
-     // We should never reach this point in a real execution
-     // but we can test that it recognizes exit as a builtin
      TEST_ASSERT_TRUE(result);
      
-     // Clean up - this won't actually run in real execution
-     // since exit would terminate the process
+
      free(sh.prompt);
      cmd_free(cmd);
 }
@@ -345,12 +340,11 @@ void test_do_builtin_null(void)
 // Test parse_args with -v flag
 void test_parse_args_version(void)
 {
-     // This is hard to test directly since it exits the process
-     // We'll test that parse_args exists without crashing when no flags
+
+     // Tesr that parse_args exists without crashing when no flags
      char *args[] = {"program_name", NULL};
      parse_args(1, args);
      
-     // If we get here, it didn't exit, which is expected with no flags
      TEST_ASSERT_TRUE(true);
 }
 
